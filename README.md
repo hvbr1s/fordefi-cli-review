@@ -7,8 +7,7 @@ A command-line interface for broadcasting transactions using the Fordefi API.
 ## Prerequisites
 
 - Python 3.x
-- Fordefi API User Token
-- Fordefi API Signer
+- Fordefi API User Token and API Signer (setup instructions can be found [here](https://docs.fordefi.com/developers/program-overview))
 
 ## Setup
 
@@ -17,7 +16,7 @@ A command-line interface for broadcasting transactions using the Fordefi API.
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
 
-2. Set up the project an install dependencies:
+2. Set up the project and install dependencies:
    ```bash
    git clone <repository-url>
    cd <repository-name>
@@ -45,26 +44,26 @@ A command-line interface for broadcasting transactions using the Fordefi API.
 ## Usage
 
 ```bash
-python fordefi_cli.py --vault-id <VAULT_ID> --destination <ADDRESS> --ecosystem <NETWORK> --value <AMOUNT> [OPTIONS]
+./fordefi_cli --vault <VAULT_ID> --to <ADDRESS> --chain <NETWORK> --value <AMOUNT> [OPTIONS]
 ```
 
 ### Required Arguments
 
-- `--vault-id`: The vault ID from which to send the transaction
-- `--destination`: The destination address
-- `--ecosystem`: Network on which to broadcast the transaction (`sol`, `evm`, `sui`, `ton`, `apt`, `btc`)
+- `--vault`: The vault ID from which to send the transaction
+- `--to`: The destination address
+- `--chain`: Network on which to broadcast the transaction (`sol`, `evm`, `sui`, `ton`, `apt`, `btc`)
 - `--value`: Amount to send
 
 ### Optional Arguments
 
-- `--evm-chain`: Required only if ecosystem is 'evm'. Options: `arbitrum`, `optimism`, `ethereum`, `bsc`
-- `--token`: Token ticker (e.g., 'usdc', 'weth'). Omit for native assets
-- `--note`: Custom note for the transaction
+- `--evm-chain`: Required only if ecosystem is 'evm'. Currently supported options: `arbitrum`, `optimism`, `ethereum`, `bsc`
+- `--token`: Token ticker (e.g., 'usdc', 'weth'). Omit for native assets like ETH, SOL, SUI, APT, BTC, TON etc.
+- `--note`: Optional custom note for the transaction.
 
 ### Example
 
 ```bash
-./fordefi_cli.py --vault-id v123 --destination 0x123... --ecosystem evm --evm-chain ethereum --value 1.5 --token usdc --note "Test transfer"
+./fordefi_cli --vault c1a0a9db-8520-45f9-ac0e-d004df2316c0 --destination 0x123... --chain evm --evm-chain arbitrum --value 1.5 --token usdc --note "Test transfer"
 ```
 
 The transaction will be broadcast after confirming all details.
@@ -74,13 +73,41 @@ The transaction will be broadcast after confirming all details.
 - Ethereum (ETH)
 - BSC (BNB and USDT)
 - Arbitrum (ETH and USDC)
-- Solana (SOL coins only)
-- Sui (SUI coins only)
-- Ton (TON coins only)
+- Solana (SOL and USDC)
+- Sui (SUI and USDC)
+- Ton (TON and USDT)
 - Aptos (APT coins only)
 - Bitcoin
 
 
-## Adding more assets and networks
+## Adding more assets
 
-[Learn more](https://docs.fordefi.com/reference/transaction-types) about integrating other networks and assets.
+You can extend the CLI to support additional tokens and networks by modifying the `configs/ecosystem_configs.py` file. The configuration is organized by ecosystem (e.g., 'sol', 'evm') and includes settings for both native assets and tokens.
+
+### Adding new tokens
+
+To add a new token, locate the appropriate ecosystem and add your token configuration under the `tokens` section:
+
+```python
+# For EVM tokens:
+"evm": {
+    "tokens": {
+        "ethereum": {  # Chain name
+            "new_token": {  # Token ticker (lowercase)
+                "contract_address": "0x...",  # Token contract address
+                "decimals": 18  # Token decimals
+            }
+        }
+    }
+}
+
+# For Solana tokens:
+"sol": {
+    "tokens": {
+        "new_token": {  # Token ticker (lowercase)
+            "decimals": 6,
+            "program_address": "..."  # SPL token program address
+        }
+    }
+}
+```
