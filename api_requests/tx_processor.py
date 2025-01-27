@@ -13,7 +13,7 @@ def process_transaction(ecosystem, evm_chain, vault_id, destination, value, cust
     if not eco_config:
         raise ValueError(f"Ecosystem '{ecosystem}' is not supported.")
 
-    # 2) Convert value to float
+    # 2) Sanitize the value
     try:
         value = Decimal(value.replace(",", "."))
     except Exception:
@@ -35,7 +35,7 @@ def process_transaction(ecosystem, evm_chain, vault_id, destination, value, cust
         if not builder:
             raise ValueError(f"No native TX builder found for {ecosystem}.")
 
-        # EVM native has a different signature that requires an extra evm param
+        # EVM native has a different signature that requires an extra evm argument that represents the network (ethereum, bsc, arbitrum, optimism, etc)
         if ecosystem == "evm":
             return builder(evm_chain, vault_id, destination, custom_note, str(value))
         else:

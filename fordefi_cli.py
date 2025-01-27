@@ -76,7 +76,7 @@ def main():
     value = args.value.lower()
     custom_note = args.note
 
-    # 4. Print summary (like your old script did)
+    # 4. Print summary
     print(f"🚀 Excellent! Sending from vault {vault_id} to {destination} on {ecosystem.upper()}"
           f"{f' -> {evm_chain}' if evm_chain else ''}.")
 
@@ -100,7 +100,7 @@ def main():
     # 7. Sign payload
     signature = sign(payload=payload)
 
-    # 8. Broadcast transaction
+    # 8. Push transaction to Fordefi
     try:
         method = "post" 
         resp_tx = make_api_request(path, FORDEFI_API_USER_TOKEN, signature, timestamp, request_body, method=method,)

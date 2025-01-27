@@ -44,7 +44,7 @@ ECOSYSTEM_CONFIGS = {
                     "decimals": 6
                 }
             }
-            # Add more Solana tokens here as needed
+            # Add more ERC20 tokens here as needed
         },
     },
     "sui": {
@@ -76,7 +76,7 @@ ECOSYSTEM_CONFIGS = {
                 "decimals": 6,
                 "program_address": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"
             }
-            # Add more SUI tokens here as needed
+            # Add more TON jettons here as needed
         },
     },
     "btc": {

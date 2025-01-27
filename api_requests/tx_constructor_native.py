@@ -15,7 +15,7 @@ def evm_tx_native(evm_chain, vault_id, destination, custom_note, value):
     # 2) Check for at least 1 wei
     if smallest_unit < 1:
         raise ValueError(
-            f"Value {value} is too small. Must be >= {Decimal(1) / Decimal('1e18')} ETH."
+            f"Value {value} is too small. Must be >= {Decimal(1) / Decimal('1e18')} ETH or BNB."
         )
 
     final_value = str(smallest_unit)
